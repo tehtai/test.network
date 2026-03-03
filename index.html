@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3/13 世界睡眠日 ｜ 睡眠模範生檢測【測試】 🌙</title>
+  <title>🌙睡眠模範生檢測｜德泰法蘭西床</title>
   <style>
     :root{
       --bg:#f4f1ea;
@@ -127,6 +127,41 @@
       letter-spacing:.3px;
       background:linear-gradient(180deg, rgba(224,175,180,.22), rgba(163,177,198,.16));
     }
+    /* ===== Banner 分數漸層色 ===== */
+
+.banner--legend{
+  background: linear-gradient(
+    135deg,
+    rgba(235, 211, 156, 0.55),
+    rgba(204, 173, 104, 0.35)
+  );
+}
+
+.banner--good{
+  background: linear-gradient(
+    135deg,
+    rgba(176, 205, 186, 0.55),
+    rgba(129, 168, 148, 0.35)
+  );
+}
+
+.banner--warn{
+  background: linear-gradient(
+    135deg,
+    rgba(241, 186, 140, 0.55),
+    rgba(215, 143, 95, 0.35)
+  );
+}
+
+.banner--danger{
+  background: linear-gradient(
+    135deg,
+    rgba(224, 175, 180, 0.65),
+    rgba(193, 135, 143, 0.4)
+  );
+}
+    /* ===== Banner 分數漸層色 ===== */
+    
     .banner .big{
       font-size:1.2rem;
       margin-bottom:4px;
@@ -205,7 +240,7 @@
   <div class="container">
     <div id="quiz-ui">
       <h1>🌙 你是「睡眠模範生」<br>還是「熬夜特種兵」？🎓</h1>
-      <p class="subtitle">✨ 3/13 世界睡眠日 ✨<br>做個小測驗，看看你的好眠程度！</p>
+      <p class="subtitle">✨ 3/13 世界睡眠日 ✨<br>做個簡單的小測驗，檢視一下日常的睡眠狀況吧！</p>
 
       <div class="note">
         <strong>作答方式：</strong>請以<strong>近 2 週～1 個月</strong>「多數日子」的狀態為準（偶爾例外沒關係）。<br>
@@ -302,7 +337,15 @@
     function showResults(){
       const score = getScore();
       const pack = resultPack(score);
+      
+const bannerEl = document.getElementById('emoji-banner');
+bannerEl.classList.remove('banner--legend','banner--good','banner--warn','banner--danger');
 
+if (score >= 9) bannerEl.classList.add('banner--legend');
+else if (score >= 6) bannerEl.classList.add('banner--good');
+else if (score >= 3) bannerEl.classList.add('banner--warn');
+else bannerEl.classList.add('banner--danger');
+      
       bannerTitle.textContent = pack.banner;
       bannerSub.textContent = pack.sub;
       scoreLabel.textContent = pack.label;
