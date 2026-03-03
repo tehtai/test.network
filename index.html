@@ -6,47 +6,43 @@
 <title>🌙睡眠模範生檢測｜德泰法蘭西床</title>
 
 <style>
-:root{
-  --bg:#f4f1ea;
-  --card:#ffffff;
-  --text:#57606f;
-  --pink:#e0afb4;
-  --blue:#a3b1c6;
-  --border:#f0ede5;
-  --shadow:0 10px 40px rgba(163,177,198,.15);
+:root {
+  --bg-color: #f4f1ea;
+  --card-bg: #ffffff;
+  --text-main: #57606f;
+  --accent-pink: #e0afb4;
+  --accent-blue: #a3b1c6;
+  --shadow: 0 10px 40px rgba(163,177,198,0.15);
 }
-
-*{box-sizing:border-box;}
 
 body{
   margin:0;
   padding:20px;
-  background:var(--bg);
-  color:var(--text);
+  background:var(--bg-color);
   font-family:'PingFang TC','Microsoft JhengHei',sans-serif;
+  color:var(--text-main);
 }
 
 .container{
   max-width:480px;
   margin:auto;
-  background:var(--card);
-  border-radius:28px;
+  background:var(--card-bg);
+  border-radius:30px;
+  padding:35px 25px;
   box-shadow:var(--shadow);
-  padding:30px 22px;
 }
 
 h1{
   text-align:center;
-  color:var(--pink);
+  color:var(--accent-pink);
   font-size:1.4rem;
   margin-bottom:10px;
 }
 
 .subtitle{
   text-align:center;
-  color:var(--blue);
-  font-size:.95rem;
-  font-weight:600;
+  color:var(--accent-blue);
+  font-size:.9rem;
   margin-bottom:20px;
 }
 
@@ -62,82 +58,75 @@ h1{
 .quiz-item{
   display:flex;
   gap:12px;
-  align-items:flex-start;
   background:#fdfcf9;
-  border:1px solid var(--border);
+  border:1px solid #f0ede5;
   padding:14px;
-  border-radius:16px;
+  border-radius:15px;
   margin-bottom:12px;
   cursor:pointer;
 }
 
-.quiz-item:hover{
-  border-color:var(--pink);
-}
-
 input[type="checkbox"]{
   transform:scale(1.2);
-  accent-color:var(--pink);
+  accent-color:var(--accent-pink);
 }
 
 .btn{
   width:100%;
-  padding:15px;
+  padding:16px;
   border:none;
-  border-radius:999px;
-  font-weight:700;
+  border-radius:35px;
+  font-weight:600;
   cursor:pointer;
 }
 
 .btn-main{
-  background:var(--pink);
+  background:var(--accent-pink);
   color:#fff;
 }
 
 .btn-reset{
-  background:var(--blue);
+  background:var(--accent-blue);
   color:#fff;
   margin-top:15px;
 }
 
-/* ========= Banner 等級色 ========= */
+/* ===== Banner 顏色分級 ===== */
 
 .banner{
-  border-radius:18px;
-  padding:16px;
+  border-radius:20px;
+  padding:18px;
   text-align:center;
-  margin-bottom:15px;
+  margin-bottom:20px;
   color:#fff;
 }
 
-.banner--gold{
+.banner--legend{
   background:linear-gradient(135deg,#e7c97f,#caa85a);
 }
 
-.banner--green{
+.banner--good{
   background:linear-gradient(135deg,#a8c8b0,#7aa58a);
 }
 
-.banner--orange{
+.banner--warn{
   background:linear-gradient(135deg,#f2b47c,#de8f5c);
 }
 
-.banner--pink{
+.banner--danger{
   background:linear-gradient(135deg,#e0afb4,#c88f9a);
 }
 
-.banner .big{
-  font-size:1.5rem;
-  margin-bottom:5px;
+.banner .title{
+  font-size:1.6rem;
+  margin-bottom:6px;
 }
 
-.banner .small strong{
+.banner .subtitle-text strong{
   display:block;
   font-size:1.2rem;
-  margin-bottom:3px;
+  margin-bottom:4px;
 }
-
-/* meter */
 
 .meter{
   height:14px;
@@ -150,20 +139,19 @@ input[type="checkbox"]{
 .meter div{
   height:100%;
   width:0%;
-  background:linear-gradient(90deg,var(--blue),var(--pink));
+  background:linear-gradient(90deg,var(--accent-blue),var(--accent-pink));
   transition:width .4s ease;
 }
 
 .feedback{
   background:#f9f9f9;
-  padding:18px;
-  border-radius:18px;
+  padding:20px;
+  border-radius:20px;
   line-height:1.8;
   margin-bottom:10px;
 }
 
 #result-box{display:none;}
-
 </style>
 </head>
 
@@ -186,27 +174,27 @@ input[type="checkbox"]{
 </div>
 
 <div class="quiz-list">
-<label class="quiz-item"><input type="checkbox" class="q-check">規律作息：每天固定時間起床</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">睡前1小時不看手機</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">下午3點後不攝取咖啡因</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">睡前有放鬆儀式</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">臥室全暗且舒適</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">睡前不依賴酒精</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">睡前3小時不吃宵夜</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">20分鐘內入睡</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">半夜不易醒來</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">醒來精神好</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">🕰️ 規律作息：每天固定時間起床</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">📱 數位斷食：睡前1小時不看手機</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">☕ 避開刺激：下午3點後不攝取咖啡因</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">🧘 舒壓儀式：睡前看書、冥想或聽音樂</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">🕯️ 環境控制：臥室全暗且溫度舒適</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">🥃 酒精斷捨離：睡前不依賴酒精助眠</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">🍛 腸胃放鬆：睡前3小時不吃大餐或宵夜</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">🚀 秒睡體質：躺下後20分鐘內能入睡</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">💤 睡眠深度：半夜不輕易醒來或能秒睡回</label>
+<label class="quiz-item"><input type="checkbox" class="q-check">☀️ 晨間精神：醒來感到神清氣爽而非疲累</label>
 </div>
 
-<button class="btn btn-main" onclick="showResults()">查看我的檢測結果</button>
+<button class="btn btn-main" onclick="showResults()">查看我的檢測結果 ✨</button>
 
 </div>
 
 <div id="result-box">
 
 <div id="banner" class="banner">
-<div class="big" id="banner-title"></div>
-<div class="small" id="banner-sub"></div>
+<div class="title" id="banner-title"></div>
+<div class="subtitle-text" id="banner-sub"></div>
 </div>
 
 <div class="meter"><div id="meter-bar"></div></div>
@@ -215,7 +203,7 @@ input[type="checkbox"]{
 
 <div class="feedback" id="feedback-msg"></div>
 
-<button class="btn btn-reset" onclick="resetGame()">重新測試</button>
+<button class="btn btn-reset" onclick="resetGame()">🔄 重新測試</button>
 
 </div>
 
@@ -224,39 +212,39 @@ input[type="checkbox"]{
 <script>
 
 function showResults(){
-const score = document.querySelectorAll('.q-check:checked').length;
-const banner = document.getElementById('banner');
-const bannerTitle = document.getElementById('banner-title');
-const bannerSub = document.getElementById('banner-sub');
-const feedback = document.getElementById('feedback-msg');
-const meter = document.getElementById('meter-bar');
-const scoreText = document.getElementById('score-text');
+const score=document.querySelectorAll('.q-check:checked').length;
+const banner=document.getElementById("banner");
+const title=document.getElementById("banner-title");
+const sub=document.getElementById("banner-sub");
+const feedback=document.getElementById("feedback-msg");
+const meter=document.getElementById("meter-bar");
+const scoreText=document.getElementById("score-text");
 
 banner.className="banner";
 
 if(score>=9){
-banner.classList.add("banner--gold");
-bannerTitle.textContent="🏆🌙✨";
-bannerSub.innerHTML="<strong>傳說級模範生</strong>你是睡眠界資優生！";
-feedback.innerHTML="恭喜你！作息穩定、睡眠品質優秀。請繼續保持這份好眠能量。";
+banner.classList.add("banner--legend");
+title.textContent="🏆🌙✨";
+sub.innerHTML="<strong>傳說級模範生</strong>你簡直是睡眠界的資優生。規律的作息讓你擁有極高的生活品質！";
+feedback.innerHTML="🏆 <strong>傳說級模範生</strong><br>恭喜你！你簡直是睡眠界的資優生。規律的作息讓你擁有極高的生活品質，請繼續保持這份幸福的能量，讓身體每天都在巔峰狀態！✨";
 }
 else if(score>=6){
-banner.classList.add("banner--green");
-bannerTitle.textContent="🌿😴👍";
-bannerSub.innerHTML="<strong>穩定優等生</strong>大多數日子都睡得不錯";
-feedback.innerHTML="基礎很好！再微調一兩個小習慣，就能更進一步。";
+banner.classList.add("banner--good");
+title.textContent="🌿😴👍";
+sub.innerHTML="<strong>穩定優等生</strong>大部分時間都能好好休息";
+feedback.innerHTML="🌿 <strong>穩定優等生</strong><br>很棒！你的睡眠基礎打得很穩。雖然偶爾會被生活瑣事干擾，但大部分時間都能好好休息。只要再調整一下微小的壞習慣，就能晉升神人級別囉！💪";
 }
 else if(score>=3){
-banner.classList.add("banner--orange");
-bannerTitle.textContent="⚠️🥱";
-bannerSub.innerHTML="<strong>熬夜特種兵</strong>疲勞訊號出現";
-feedback.innerHTML="可以從提早30分鐘睡覺開始改善。";
+banner.classList.add("banner--warn");
+title.textContent="⚠️🥱";
+sub.innerHTML="<strong>熬夜特種兵</strong>你的大腦正在發出疲勞訊號";
+feedback.innerHTML="⚠️ <strong>熬夜特種兵</strong><br>警報響起！你的大腦正在發出疲勞訊號。今晚試著提早 30 分鐘關燈吧！🕯️";
 }
 else{
-banner.classList.add("banner--pink");
-bannerTitle.textContent="😱🛌";
-bannerSub.innerHTML="<strong>睡眠特困戶</strong>睡眠債可能超支";
-feedback.innerHTML="請優先建立規律作息，必要時諮詢專業。";
+banner.classList.add("banner--danger");
+title.textContent="😱🛌";
+sub.innerHTML="<strong>睡眠特困戶</strong>你的睡眠債已經嚴重超支";
+feedback.innerHTML="😱 <strong>睡眠特困戶</strong><br>天啊！你的睡眠債已經嚴重超支了！今晚請放下所有事，直接原地躺平吧！🛌";
 }
 
 meter.style.width=(score*10)+"%";
