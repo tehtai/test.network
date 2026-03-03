@@ -345,7 +345,8 @@
     /* 預覽縮小：桌機/手機都看得到完整圖卡 */
     .preview-wrap #shareCard{
       transform:scale(.33);
-      transform-origin:top center;
+        transform-origin: top center;
+        will-change: transform;
     }
     @media (max-width:520px){
       .preview-wrap #shareCard{ transform:scale(.23); }
@@ -671,11 +672,34 @@
       const url = "https://api.qrserver.com/v1/create-qr-code/?format=svg&size="+size+"x"+size+"&data=" + encodeURIComponent(text);
       return fetch(url).then(r=>r.text());
     }
+function fitShareCardPreview(){
+  const wrap = document.querySelector('.preview-wrap');
+  if(!wrap) return;
 
+  // 可用空間（留一點邊界）
+  const padding = 16;
+  const availW = wrap.clientWidth - padding * 2;
+  const availH = wrap.clientHeight - padding * 2;
+
+  // 分享卡原尺寸
+  const baseW = 1080;
+  const baseH = 1920;
+
+  // 依照寬高取最小縮放，避免裁切
+  const scale = Math.min(availW / baseW, availH / baseH);
+
+  // 套用縮放
+  shareCard.style.transform = `scale(${scale})`;
+}
     function openModal(){
-      cardModal.classList.add('open');
-      cardModal.setAttribute('aria-hidden','false');
-    }
+  cardModal.classList.add('open');
+  cardModal.setAttribute('aria-hidden','false');
+
+  // ✅ 等 DOM 顯示後再算縮放
+  requestAnimationFrame(() => {
+    fitShareCardPreview();
+  });
+}
     function closeModal(){
       cardModal.classList.remove('open');
       cardModal.setAttribute('aria-hidden','true');
@@ -710,14 +734,19 @@
     }
 
     async function exportCardBlob(){
-      // 用原尺寸 1080x1920 生成，不受預覽縮放影響
-      const canvas = await html2canvas(shareCard, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: null
-      });
-      return new Promise(resolve => canvas.toBlob(resolve, "image/png", 1));
-    }
+  const prevTransform = shareCard.style.transform;
+  shareCard.style.transform = 'none';
+
+  const canvas = await html2canvas(shareCard, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: null
+  });
+
+  shareCard.style.transform = prevTransform;
+
+  return new Promise(resolve => canvas.toBlob(resolve, "image/png", 1));
+}
 
     async function downloadCard(){
       const blob = await exportCardBlob();
@@ -816,6 +845,10 @@
 
     btnDownloadCard.addEventListener('click', downloadCard);
     btnSystemShare.addEventListener('click', systemShare);
+window.addEventListener('resize', () => {
+  if(cardModal.classList.contains('open')) fitShareCardPreview();
+});
+    
   </script>
 </body>
 </html>
