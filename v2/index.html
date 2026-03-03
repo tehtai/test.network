@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌙睡眠模範生檢測｜德泰法蘭西床</title>
+  <style>
+    :root{
+      --bg:#f4f1ea;
+      --card:#ffffff;
+      --text:#6f6256;
+      --pink:#bca88f;
+      --blue:#9c8f7d;
+      --border:#f0ede5;
+      --shadow:0 10px 40px rgba(163,177,198,.15);
+      --soft:#fdfcf9;
+      --soft2:#f9f9f9;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      padding:20px;
+      background:var(--bg);
+      color:var(--text);
+      font-family:'PingFang TC','Microsoft JhengHei',sans-serif;
+      line-height:1.6;
+    }
+    .container{
+      max-width:clamp(480px, 90%, 560px);
+      margin:0 auto;
+      background:var(--card);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:30px 22px;
+    }
+    h1{
+      margin:0 0 10px 0;
+      color:var(--pink);
+      font-size:1.45rem;
+      line-height:1.35;
+      font-weight:800;
+      text-align:center;
+    }
+    .subtitle{
+      margin:0 0 14px 0;
+      color:var(--blue);
+      font-size:.95rem;
+      font-weight:650;
+      text-align:center;
+    }
+    .note{
+      margin:0 0 20px 0;
+      background:var(--soft2);
+      border-radius:16px;
+      padding:12px 14px;
+      font-size:.9rem;
+      line-height:1.7;
+    }
+    .note strong{ color:var(--text); }
+    /* ⬇⬇⬇ 在這裡貼新的 CSS ⬇⬇⬇ */
+    .note-title{
+      font-weight:800;
+      color:var(--text);
+      margin-bottom:8px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .note-list{
+      margin:0;
+      padding-left:18px;
+      line-height:1.75;
+    }
+    .note-list li{
+      margin:6px 0;
+    }
+    .note strong{
+      font-weight:800;
+    }
+    /* ↑ 在這裡貼新的 CSS ↑ */
+    
+    .quiz-list{ margin:0 0 18px 0; padding:0; }
+    .quiz-item{
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      background:var(--soft);
+      border:1px solid var(--border);
+      padding:14px 16px;
+      margin:0 0 12px 0;
+      border-radius:16px;
+      cursor:pointer;
+      transition:transform .15s ease, border-color .15s ease, background-color .15s ease;
+      user-select:none;
+    }
+    .quiz-item:hover{
+      background:#fff;
+      border-color:var(--pink);
+      transform:translateY(-1px);
+    }
+    .quiz-item span{
+      display:block;
+      font-size:.98rem;
+      line-height:1.45;
+    }
+    input[type="checkbox"]{
+      margin-top:2px;
+      transform:scale(1.15);
+      accent-color:var(--pink);
+      cursor:pointer;
+      flex:0 0 auto;
+    }
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:999px;
+      padding:15px 16px;
+      font-size:1.05rem;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .15s ease, filter .15s ease;
+    }
+    .btn-main{
+      background:var(--pink);
+      color:#fff;
+      box-shadow:0 4px 12px rgba(224,175,180,.28);
+    }
+    .btn-main:hover{ transform:scale(1.01); filter:brightness(.98); }
+    .btn-reset{
+      margin-top:14px;
+      background:var(--blue);
+      color:#fff;
+    }
+    .btn-reset:hover{ transform:scale(1.01); filter:brightness(.97); }
+
+    /* ✅ 新增：分享按鈕（不影響原本設定） */
+    .btn-share{
+      margin-top:14px;
+      background:var(--pink);
+      color:#fff;
+    }
+    .btn-share:hover{
+      transform:scale(1.01);
+      filter:brightness(.98);
+    }
+
+    #result-box{ display:none; }
+    .fade-in{ animation:fadeIn .45s ease; }
+    @keyframes fadeIn{
+      from{ opacity:0; transform:translateY(10px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+
+    .banner{
+      border-radius:18px;
+      padding:14px 16px;
+      margin:0 0 14px 0;
+      text-align:center;
+      font-weight:900;
+      letter-spacing:.3px;
+      background:linear-gradient(180deg, rgba(224,175,180,.22), rgba(163,177,198,.16));
+    }
+    /* ===== Banner 分數漸層色 ===== */
+
+    .banner--legend{
+      background: linear-gradient(
+        135deg,
+        rgba(235, 211, 156, 0.55),
+        rgba(204, 173, 104, 0.35)
+      );
+    }
+
+    .banner--good{
+      background: linear-gradient(
+        135deg,
+        rgba(176, 205, 186, 0.55),
+        rgba(129, 168, 148, 0.35)
+      );
+    }
+
+    .banner--warn{
+      background: linear-gradient(
+        135deg,
+        rgba(241, 186, 140, 0.55),
+        rgba(215, 143, 95, 0.35)
+      );
+    }
+
+    .banner--danger{
+      background: linear-gradient(
+        135deg,
+        rgba(224, 175, 180, 0.65),
+        rgba(193, 135, 143, 0.4)
+      );
+    }
+
+    /* ===== Banner 分數漸層色 ===== */
+    
+    .banner .big{
+      font-size:1.2rem;
+      margin-bottom:4px;
+    }
+    .banner .small{
+      font-size:1.05rem;
+      font-weight:800;
+      /*opacity:.9;*/
+    }
+
+    .score-title{
+      text-align:center;
+      font-size:1.02rem;
+      font-weight:800;
+      color:var(--blue);
+      margin:8px 0 8px 0;
+    }
+
+    .meter{
+      background:#efece4;
+      border-radius:999px;
+      height:14px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      margin:0 0 10px 0;
+    }
+    .meter > div{
+      height:100%;
+      width:0%;
+      background:linear-gradient(
+        90deg,
+        #8c755f 0%,
+        #a98f72 60%,
+        #bda385 100%
+      );
+      transition:width .4s ease;
+    }
+
+    .score-line{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin:0 0 10px 0;
+      font-weight:800;
+    }
+    .score-badge{
+      padding:6px 12px;
+      border-radius:999px;
+      background:#efe7dd;
+      border:1px solid #d8c8b6;
+      color:#7f6e5c;
+      font-size:.92rem;
+      white-space:nowrap;
+    }
+    .score-detail{
+      font-size:.92rem;
+      opacity:.9;
+      white-space:nowrap;
+    }
+
+    .feedback-text{
+      background:var(--soft2);
+      padding:18px 18px;
+      border-radius:18px;
+      font-size:1rem;
+      line-height:1.85;
+      margin:0 0 12px 0;
+    }
+
+    @media (max-width:420px){
+      body{ padding:14px; }
+      .container{ padding:24px 16px; border-radius:22px; }
+      h1{ font-size:1.28rem; }
+      .subtitle{ font-size:.9rem; }
+      .quiz-item{ padding:12px 14px; }
+    }
+    /* LOGO的樣式 --*/
+    .brand-footer{
+      text-align:center;
+      margin-top:12px;
+      opacity:.6;
+    }
+
+    .brand-footer img{
+      max-width:110px;
+      height:auto;
+    }
+    /* LOGO的樣式 --*/  
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="quiz-ui">
+      <h1>🌙 你是「睡眠模範生」還是「夜貓進修生」？🎓</h1>
+      <p class="subtitle">✨ 3/13 世界睡眠日 ✨<br>做個簡單的小測驗，檢視一下日常的睡眠狀況吧！</p>
+
+      <div class="note">
+        <ul class="note-list">
+          <li><strong>作答方式：</strong>請依<strong>最近 2 週～1 個月</strong>的睡眠狀況勾選。</li>
+          <li>本測驗為日常睡眠習慣自我檢視，非醫療評估用途。</li>
+        </ul>
+      </div>
+
+      <div class="quiz-list">
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🕰️ 規律作息：每天固定時間起床（±1小時內）</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>☕ 避開刺激：下午 3 點後避免咖啡因（咖啡、濃茶、能量飲）</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🍛 腸胃放鬆：睡前 2–3 小時不吃高油脂、高熱量或過飽</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>📱 數位斷食：睡前 30–60 分鐘不滑手機</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🕯️ 環境控制：臥室全暗、安靜且溫度舒適</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🚀 易睡體質：躺床後約 20–30 分鐘內入睡</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>💤 睡眠深度：半夜醒來不超過 1 次，或能迅速再入睡</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>☀️ 晨間精神：醒來神清氣爽，而不是感到疲累</span></label>
+      </div>
+
+      <button class="btn btn-main" id="btn-result" type="button">查看我的檢測結果</button>
+    </div>
+
+    <div id="result-box">
+      <div class="banner" id="emoji-banner">
+        <div class="big" id="banner-title">🌙</div>
+        <div class="small" id="banner-sub">你的結果出爐啦</div>
+      </div>
+
+      <div class="score-title">📈 我的好眠指數</div>
+
+      <div class="meter" aria-label="sleep score meter">
+        <div id="meter-bar"></div>
+      </div>
+
+      <div class="score-line">
+        <div class="score-badge" id="score-label">—</div>
+        <div class="score-detail" id="score-detail">滿分 8 分</div>
+      </div>
+
+      <div class="feedback-text" id="feedback-msg"></div>
+
+      <!-- ✅ 新增：分享按鈕 -->
+      <button class="btn btn-share" id="btn-share" type="button">📣 分享結果</button>
+
+      <button class="btn btn-reset" id="btn-reset" type="button">🔄 重新測試</button>
+    </div>
+  </div> <!-- container -->
+
+  <div class="brand-footer">
+    <a href="https://www.tehtai.com.tw/locations/" target="_blank" rel="noopener">
+      <img src="tehtailogo.png" alt="德泰法蘭西床">
+    </a>
+  </div>
+   
+  <script>
+    const quizUI = document.getElementById('quiz-ui');
+    const resultBox = document.getElementById('result-box');
+    const feedbackMsg = document.getElementById('feedback-msg');
+    const btnResult = document.getElementById('btn-result');
+    const btnReset = document.getElementById('btn-reset');
+
+    const bannerTitle = document.getElementById('banner-title');
+    const bannerSub = document.getElementById('banner-sub');
+    const scoreLabel = document.getElementById('score-label');
+    const meterBar = document.getElementById('meter-bar');
+
+    /* ✅ 新增：分享按鈕 */
+    const btnShare = document.getElementById('btn-share');
+
+    function getScore(){
+      return document.querySelectorAll('.q-check:checked').length;
+    }
+
+    function resultPack(score){
+      if (score >= 7) {
+        return {
+          banner: "🏆🌙✨",
+          sub: "傳說級模範生：你是睡眠界資優生！",
+          label: "好眠指數：優秀",
+          text: "恭喜你！你的作息與睡眠品質都很到位。規律睡眠會讓精神、代謝與情緒更穩，繼續保持這份幸福能量吧！✨"
+        };
+      }
+      if (score >= 5) {
+        return {
+          banner: "🌿😴👍",
+          sub: "穩定優等生：大多數日子都睡得不錯",
+          label: "好眠指數：良好",
+          text: "很棒！你的睡眠基礎很穩。只要再挑 1～2 項最容易做到的習慣加強（例如減少睡前的光線刺激），就很有機會往上加分！💪"
+        };
+      }
+      if (score >= 3) {
+        return {
+          banner: "⚠️🕯️🥱",
+          sub: "夜貓進修生：疲勞訊號出現了",
+          label: "好眠指數：需加強",
+          text: "警報響起！短期撐得住，但長期身體會抗議。今晚先從「提早 30 分鐘休息」或「固定起床時間」選一個開始改善，最有效。"
+        };
+      }
+      return {
+        banner: "😱🛌🌀",
+        sub: "睡眠警示戶：身體需要更多修復時間",
+        label: "好眠指數：偏低",
+        text: "目前的睡眠狀態可能影響身體的修復與精神。除了建立固定起床時間與減少睡前光線刺激，也可檢視整體睡眠時數是否足夠（多數成人約需 7–9 小時）。若持續 2–4 週仍無改善，建議尋求專業醫師協助評估。"
+      };
+    }
+
+    function showResults(){
+      const score = getScore();
+      const pack = resultPack(score);
+      
+      const bannerEl = document.getElementById('emoji-banner');
+      bannerEl.classList.remove('banner--legend','banner--good','banner--warn','banner--danger');
+
+      if (score >= 7) bannerEl.classList.add('banner--legend');
+      else if (score >= 5) bannerEl.classList.add('banner--good');
+      else if (score >= 3) bannerEl.classList.add('banner--warn');
+      else bannerEl.classList.add('banner--danger');
+      
+      bannerTitle.textContent = pack.banner;
+      bannerSub.textContent = pack.sub;
+      scoreLabel.textContent = pack.label;
+
+      meterBar.style.width = `${Math.round((score / 8) * 100)}%`;
+      document.getElementById('score-detail').textContent = `你的分數：${score} 分（滿分 8 分）`;
+
+      feedbackMsg.innerHTML = pack.text;
+
+      quizUI.style.display = 'none';
+      resultBox.style.display = 'block';
+      resultBox.classList.remove('fade-in');
+      void resultBox.offsetWidth;
+      resultBox.classList.add('fade-in');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetGame(){
+      document.querySelectorAll('.q-check').forEach(cb => cb.checked = false);
+      resultBox.style.display = 'none';
+      quizUI.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    btnResult.addEventListener('click', showResults);
+    btnReset.addEventListener('click', resetGame);
+
+    /* ✅ 新增：分享功能（支援手機分享 / 桌機複製） */
+    btnShare.addEventListener('click', async () => {
+      const score = getScore();
+      const pack = resultPack(score);
+
+      const shareText = `我剛做了「德泰睡眠模範生檢測」\n結果是：${pack.label}（${score}/8）\n${pack.sub}\n\n你也來測測看👇`;
+      const shareUrl = window.location.href;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: '睡眠模範生檢測｜德泰法蘭西床',
+            text: shareText,
+            url: shareUrl
+          });
+          return;
+        } catch (e) {}
+      }
+
+      try {
+        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+        alert('已複製分享內容，貼到社群即可分享！');
+      } catch (e) {
+        prompt('請複製以下內容分享：', `${shareText}\n${shareUrl}`);
+      }
+    });
+    
+  </script>
+</body>
+</html>
