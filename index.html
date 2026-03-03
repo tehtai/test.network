@@ -26,7 +26,7 @@
       line-height:1.6;
     }
     .container{
-      max-width:560px;
+      max-width:clamp(480px, 90%, 560px);
       margin:0 auto;
       background:var(--card);
       border-radius:28px;
@@ -323,8 +323,13 @@
     </div>
   </div> <!-- container -->
   <div class="brand-footer">
+  <a href="https://www.tehtai.com.tw/locations/" target="_blank" rel="noopener">
     <img src="tehtailogo.png" alt="德泰法蘭西床">
+  </a>
+  <div class="brand-link">
+    www.tehtai.com.tw/locations
   </div>
+</div>
    
   <script>
     const quizUI = document.getElementById('quiz-ui');
