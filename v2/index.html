@@ -1,13 +1,9 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌙睡眠模範生檢測｜德泰法蘭西床</title>
-
-  <!-- ✅ 新增：產生截圖用（html2canvas） -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
   <style>
     :root{
       --bg:#f4f1ea;
@@ -19,6 +15,12 @@
       --shadow:0 10px 40px rgba(163,177,198,.15);
       --soft:#fdfcf9;
       --soft2:#f9f9f9;
+
+      /* 分享圖卡色塊（跟你的 banner 氣質一致） */
+      --share-legend: rgba(235, 211, 156, 0.60);
+      --share-good:   rgba(176, 205, 186, 0.60);
+      --share-warn:   rgba(241, 186, 140, 0.62);
+      --share-danger: rgba(224, 175, 180, 0.62);
     }
     *{ box-sizing:border-box; }
     body{
@@ -61,7 +63,7 @@
       line-height:1.7;
     }
     .note strong{ color:var(--text); }
-
+    /* ⬇⬇⬇ 在這裡貼新的 CSS ⬇⬇⬇ */
     .note-title{
       font-weight:800;
       color:var(--text);
@@ -75,8 +77,13 @@
       padding-left:18px;
       line-height:1.75;
     }
-    .note-list li{ margin:6px 0; }
-    .note strong{ font-weight:800; }
+    .note-list li{
+      margin:6px 0;
+    }
+    .note strong{
+      font-weight:800;
+    }
+    /* ↑ 在這裡貼新的 CSS ↑ */
 
     .quiz-list{ margin:0 0 18px 0; padding:0; }
     .quiz-item{
@@ -131,15 +138,6 @@
       color:#fff;
     }
     .btn-reset:hover{ transform:scale(1.01); filter:brightness(.97); }
-
-    /* ✅ 新增：分享按鈕樣式（沿用你的系統，不動原本 btn） */
-    .btn-share{
-      margin-top:10px;
-      background:#efe7dd;
-      border:1px solid #d8c8b6;
-      color:#7f6e5c;
-    }
-    .btn-share:hover{ transform:scale(1.01); filter:brightness(.99); }
 
     #result-box{ display:none; }
     .fade-in{ animation:fadeIn .45s ease; }
@@ -277,6 +275,167 @@
       height:auto;
     }
     /* LOGO的樣式 --*/
+
+    /* ========== 分享功能（新增） ========== */
+    .share-actions{
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+    }
+    .btn-share{
+      flex:1;
+      background:#efe7dd;
+      border:1px solid #d8c8b6;
+      color:#7f6e5c;
+    }
+    .btn-share:hover{ transform:scale(1.01); filter:brightness(.98); }
+
+    /* Modal */
+    .share-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.35);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+    .share-modal__panel{
+      width:min(560px, 96vw);
+      background:#fff;
+      border-radius:18px;
+      box-shadow:0 20px 60px rgba(0,0,0,.18);
+      padding:14px;
+    }
+    .share-modal__preview{
+      width:100%;
+      border-radius:14px;
+      overflow:hidden;
+      background:#f4f1ea;
+      border:1px solid #eee;
+    }
+    .share-modal__preview img{ width:100%; display:block; }
+    .share-modal__btns{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+    }
+    .share-modal__btns .btn{ padding:12px 14px; font-size:1rem; }
+    .btn-secondary{
+      background:#f6f2ec;
+      border:1px solid #e7dfd4;
+      color:#7f6e5c;
+    }
+
+    /* 隱藏的「結果圖卡」容器（用來截圖） */
+    #share-card-wrap{
+      position:fixed;
+      left:-99999px;
+      top:0;
+      width:1080px;   /* IG 限動尺寸 */
+      height:1920px;
+      background:#f4f1ea;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:90px;
+    }
+    #share-card{
+      width:100%;
+      height:100%;
+      border-radius:56px;
+      background:rgba(255,255,255,.55);
+      box-shadow:0 10px 40px rgba(163,177,198,.12);
+      padding:120px 110px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      justify-content:center;
+    }
+    .share-emoji{
+      font-size:110px;
+      line-height:1;
+      margin-bottom:28px;
+    }
+    .share-title{
+      font-size:56px;
+      font-weight:900;
+      color:#6f6256;
+      line-height:1.25;
+      margin-bottom:70px;
+      letter-spacing:.2px;
+      max-width:860px;
+    }
+    .share-score-title{
+      font-size:58px;
+      font-weight:900;
+      margin-bottom:30px;
+      color:#6f6256;
+    }
+    .share-score{
+      font-size:130px;
+      font-weight:900;
+      margin:10px 0 52px 0;
+      color:#6f6256;
+    }
+    .share-label{
+      font-size:54px;
+      font-weight:900;
+      margin-bottom:34px;
+      color:#6f6256;
+    }
+    .share-subbox{
+      width:100%;
+      max-width:860px;
+      padding:36px 36px;
+      border-radius:28px;
+      font-size:46px;
+      font-weight:900;
+      line-height:1.35;
+      color:#6f6256;
+      margin:18px 0 70px 0;
+    }
+    .share-cta{
+      font-size:44px;
+      font-weight:800;
+      color:#6f6256;
+      opacity:.85;
+      margin-bottom:26px;
+    }
+    .share-qr{
+      width:260px;
+      height:260px;
+      border-radius:20px;
+      background:#fff;
+      padding:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid rgba(0,0,0,.06);
+      margin-bottom:70px;
+    }
+    .share-logo img{
+      width:260px;
+      height:auto;
+      opacity:.85;
+      display:block;
+      margin:0 auto 12px auto;
+    }
+    .share-url{
+      font-size:34px;
+      opacity:.55;
+      color:#6f6256;
+      font-weight:700;
+    }
+
+    /* 依等級換色塊（不是整張背景） */
+    #share-card.share--legend .share-subbox{ background: var(--share-legend); }
+    #share-card.share--good   .share-subbox{ background: var(--share-good); }
+    #share-card.share--warn   .share-subbox{ background: var(--share-warn); }
+    #share-card.share--danger .share-subbox{ background: var(--share-danger); }
+    /* ========== 分享功能（新增） ========== */
   </style>
 </head>
 
@@ -326,40 +485,11 @@
 
       <div class="feedback-text" id="feedback-msg"></div>
 
-      <!-- ✅ 新增：分享按鈕 -->
-      <button class="btn btn-share" id="btn-share" type="button">📤 分享結果</button>
-
-      <button class="btn btn-reset" id="btn-reset" type="button">🔄 重新測試</button>
-    </div>
-
-    <!-- ✅ 新增：隱藏「分享圖卡」區塊（生成 1080×1920 PNG） -->
-    <div id="share-card" style="position:absolute; left:-9999px; top:0;">
-      <div style="
-        width:1080px;
-        height:1920px;
-        padding:120px;
-        background:#f4f1ea;
-        font-family:'PingFang TC','Microsoft JhengHei',sans-serif;
-        color:#6f6256;
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        text-align:center;
-      ">
-        <div id="share-emoji" style="font-size:120px; margin-bottom:24px;">🌙</div>
-        <div style="font-size:64px; font-weight:900; margin-bottom:30px;">我的好眠指數</div>
-        <div id="share-score" style="font-size:140px; font-weight:900; margin-bottom:24px;">—</div>
-        <div id="share-label" style="font-size:60px; font-weight:800; margin-bottom:48px;">—</div>
-        <div id="share-sub" style="font-size:46px; opacity:.85; line-height:1.4; max-width:840px;"></div>
-
-        <div style="height:90px;"></div>
-
-        <div style="font-size:44px; opacity:.7; margin-bottom:18px;">德泰法蘭西床</div>
-        <div style="font-size:34px; opacity:.55;">tehtai.com.tw/locations</div>
+      <div class="share-actions">
+        <button class="btn btn-share" id="btn-share" type="button">📣 產生結果圖卡</button>
+        <button class="btn btn-reset" id="btn-reset" type="button">🔄 重新測試</button>
       </div>
     </div>
-
   </div> <!-- container -->
 
   <div class="brand-footer">
@@ -368,18 +498,91 @@
     </a>
   </div>
 
+  <!-- 分享 Modal（預覽＋分享/下載） -->
+  <div class="share-modal" id="share-modal" aria-hidden="true">
+    <div class="share-modal__panel">
+      <div class="share-modal__preview">
+        <img id="share-preview" alt="分享圖卡預覽">
+      </div>
+      <div class="share-modal__btns">
+        <button class="btn btn-main" id="btn-share-native" type="button">分享</button>
+        <button class="btn btn-secondary" id="btn-download" type="button">下載圖片</button>
+        <button class="btn btn-secondary" id="btn-close-modal" type="button">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 隱藏圖卡（用 html2canvas 截成圖片） -->
+  <div id="share-card-wrap" aria-hidden="true">
+    <div id="share-card">
+      <div class="share-emoji" id="share-emoji">🌙</div>
+
+      <!-- (1) emoji 下方寫測驗標題 -->
+      <div class="share-title">🌙 你是「睡眠模範生」還是「夜貓進修生」？🎓</div>
+
+      <div class="share-score-title">我的好眠指數</div>
+      <div class="share-score" id="share-score">0 / 8</div>
+      <div class="share-label" id="share-label">好眠指數：—</div>
+
+      <!-- (3) 用色塊框住結果敘述（色塊隨等級） -->
+      <div class="share-subbox" id="share-sub">—</div>
+
+      <!-- (4) 引導文字 + QR code -->
+      <div class="share-cta">你也來測看看自己有沒有睡好呢?</div>
+      <div class="share-qr">
+        <div id="share-qr-box"></div>
+      </div>
+
+      <!-- (2) 底部只放 logo -->
+      <div class="share-logo">
+        <img id="share-logo"
+             src=""
+             alt="logo"
+             crossorigin="anonymous">
+      </div>
+      <div class="share-url" id="share-url">tehtai.com.tw/locations</div>
+    </div>
+  </div>
+
+  <!-- 需要：html2canvas（截圖）＋ qrcodejs（生成 QR） -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
   <script>
     const quizUI = document.getElementById('quiz-ui');
     const resultBox = document.getElementById('result-box');
     const feedbackMsg = document.getElementById('feedback-msg');
     const btnResult = document.getElementById('btn-result');
     const btnReset = document.getElementById('btn-reset');
-    const btnShare = document.getElementById('btn-share');
 
     const bannerTitle = document.getElementById('banner-title');
     const bannerSub = document.getElementById('banner-sub');
     const scoreLabel = document.getElementById('score-label');
     const meterBar = document.getElementById('meter-bar');
+
+    // 分享相關
+    const btnShare = document.getElementById('btn-share');
+    const shareModal = document.getElementById('share-modal');
+    const sharePreview = document.getElementById('share-preview');
+    const btnShareNative = document.getElementById('btn-share-native');
+    const btnDownload = document.getElementById('btn-download');
+    const btnCloseModal = document.getElementById('btn-close-modal');
+
+    const shareCard = document.getElementById('share-card');
+    const shareEmoji = document.getElementById('share-emoji');
+    const shareScore = document.getElementById('share-score');
+    const shareLabel = document.getElementById('share-label');
+    const shareSub = document.getElementById('share-sub');
+    const shareQrBox = document.getElementById('share-qr-box');
+    const shareLogo = document.getElementById('share-logo');
+    const shareUrl = document.getElementById('share-url');
+
+    let lastScore = 0;
+    let lastPack = null;
+
+    // 存起來用於 Web Share / 下載
+    let lastBlob = null;
+    let lastFile = null;
 
     function getScore(){
       return document.querySelectorAll('.q-check:checked').length;
@@ -388,6 +591,7 @@
     function resultPack(score){
       if (score >= 7) {
         return {
+          level: "legend",
           banner: "🏆🌙✨",
           sub: "傳說級模範生：你是睡眠界資優生！",
           label: "好眠指數：優秀",
@@ -396,6 +600,7 @@
       }
       if (score >= 5) {
         return {
+          level: "good",
           banner: "🌿😴👍",
           sub: "穩定優等生：大多數日子都睡得不錯",
           label: "好眠指數：良好",
@@ -404,6 +609,7 @@
       }
       if (score >= 3) {
         return {
+          level: "warn",
           banner: "⚠️🕯️🥱",
           sub: "夜貓進修生：疲勞訊號出現了",
           label: "好眠指數：需加強",
@@ -411,6 +617,7 @@
         };
       }
       return {
+        level: "danger",
         banner: "😱🛌🌀",
         sub: "睡眠警示戶：身體需要更多修復時間",
         label: "好眠指數：偏低",
@@ -421,6 +628,9 @@
     function showResults(){
       const score = getScore();
       const pack = resultPack(score);
+
+      lastScore = score;
+      lastPack = pack;
 
       const bannerEl = document.getElementById('emoji-banner');
       bannerEl.classList.remove('banner--legend','banner--good','banner--warn','banner--danger');
@@ -455,51 +665,145 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // 產生 QR（每次先清空）
+    function renderQR(url){
+      shareQrBox.innerHTML = '';
+      new QRCode(shareQrBox, {
+        text: url,
+        width: 220,
+        height: 220,
+        colorDark: "#6f6256",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+
+    // 等圖片載入（避免破圖/截圖空白）
+    function waitImageLoaded(imgEl){
+      return new Promise((resolve) => {
+        if (!imgEl) return resolve();
+        if (imgEl.complete && imgEl.naturalWidth > 0) return resolve();
+        imgEl.onload = () => resolve();
+        imgEl.onerror = () => resolve();
+      });
+    }
+
+    // 產生分享圖卡 PNG
+    async function generateShareCard(){
+      const pack = lastPack || resultPack(getScore());
+      const score = lastScore ?? getScore();
+
+      // 等級 class（控制色塊）
+      shareCard.classList.remove('share--legend','share--good','share--warn','share--danger');
+      shareCard.classList.add(`share--${pack.level}`);
+
+      // 填內容
+      shareEmoji.textContent = pack.banner;
+      shareScore.textContent = `${score} / 8`;
+      shareLabel.textContent = pack.label;
+      shareSub.textContent = pack.sub;
+
+      // QR 指向「同一份測驗網址」（支援 v2 / 子路徑）
+      const quizUrl = `${location.origin}${location.pathname}`;
+      renderQR(quizUrl);
+
+      // 底部網址：固定顯示你要導流的 locations
+      shareUrl.textContent = "tehtai.com.tw/locations";
+
+      // logo：用同網域絕對路徑避免 github pages 相對路徑跑掉
+      // ⚠️ 請確認檔名就是 "tehtailogo.png"（大小寫一致）
+      shareLogo.src = `${location.origin}${location.pathname.replace(/\/[^\/]*$/, '/') }tehtailogo.png`;
+
+      await waitImageLoaded(shareLogo);
+
+      // 讓 QR canvas 渲染完成（等一拍）
+      await new Promise(r => requestAnimationFrame(r));
+
+      const canvas = await html2canvas(document.getElementById('share-card-wrap'), {
+        backgroundColor: null,
+        scale: 2,
+        useCORS: true
+      });
+
+      return new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), "image/png", 1.0);
+      });
+    }
+
+    function openModalWithBlob(blob){
+      lastBlob = blob;
+      lastFile = new File([blob], "sleep-quiz-result.png", { type: "image/png" });
+      sharePreview.src = URL.createObjectURL(blob);
+      shareModal.style.display = 'flex';
+      shareModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal(){
+      shareModal.style.display = 'none';
+      shareModal.setAttribute('aria-hidden', 'true');
+    }
+
+    // 原生分享（手機支援度較高；桌機通常不支援檔案分享）
+    async function nativeShare(){
+      if (!lastFile) return;
+
+      const shareText = `我剛測了「睡眠模範生檢測」：${lastPack?.label || ''}（${lastScore}/8）\n你也來測看看：${location.origin}${location.pathname}`;
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [lastFile] })) {
+        try{
+          await navigator.share({
+            title: "睡眠模範生檢測",
+            text: shareText,
+            files: [lastFile]
+          });
+        }catch(e){
+          // 使用者取消也會進來，直接忽略
+        }
+      } else {
+        // 不支援就提示：請先下載再上傳到 IG/FB
+        alert("你的裝置目前不支援直接分享圖片。\n已幫你準備好圖片，請按「下載圖片」後再發到 IG/FB/限動～");
+      }
+    }
+
+    function downloadImage(){
+      if (!lastBlob) return;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(lastBlob);
+      a.download = "sleep-quiz-result.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    // 綁事件
     btnResult.addEventListener('click', showResults);
     btnReset.addEventListener('click', resetGame);
 
-    // ✅ 新增：生成圖卡 PNG + 分享（Web Share）
     btnShare.addEventListener('click', async () => {
-      try{
-        const score = getScore();
-        const pack = resultPack(score);
-
-        // 填入圖卡內容
-        document.getElementById('share-emoji').textContent = pack.banner;
-        document.getElementById('share-score').textContent = `${score} / 8`;
-        document.getElementById('share-label').textContent = pack.label;
-        document.getElementById('share-sub').textContent = pack.sub;
-
-        const card = document.getElementById('share-card');
-
-        // 生成 PNG
-        const canvas = await html2canvas(card, { scale: 2, backgroundColor: null });
-        const dataUrl = canvas.toDataURL("image/png");
-
-        // 先下載（桌機也能用）
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = '我的好眠指數.png';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        // 手機支援 Web Share（可叫出分享選單）
-        if (navigator.share) {
-          const blob = await (await fetch(dataUrl)).blob();
-          const file = new File([blob], 'sleep-score.png', { type: 'image/png' });
-
-          await navigator.share({
-            files: [file],
-            title: '我的好眠指數',
-            text: '我剛做了睡眠模範生檢測～'
-          });
-        }
-      }catch(err){
-        // 失敗就友善提示（不影響原功能）
-        alert('分享功能在此瀏覽器可能不支援～你仍可用截圖或下載圖片分享 💛');
-        console.error(err);
+      // 沒測就先給結果（保險）
+      if (!lastPack) {
+        lastScore = getScore();
+        lastPack = resultPack(lastScore);
       }
+
+      btnShare.disabled = true;
+      btnShare.textContent = "⏳ 產生中…";
+
+      try{
+        const blob = await generateShareCard();
+        openModalWithBlob(blob);
+      }finally{
+        btnShare.disabled = false;
+        btnShare.textContent = "📣 產生結果圖卡";
+      }
+    });
+
+    btnShareNative.addEventListener('click', nativeShare);
+    btnDownload.addEventListener('click', downloadImage);
+    btnCloseModal.addEventListener('click', closeModal);
+
+    shareModal.addEventListener('click', (e) => {
+      if (e.target === shareModal) closeModal();
     });
   </script>
 </body>
