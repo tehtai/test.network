@@ -256,21 +256,19 @@
 
       <div class="note">
         <strong>💡作答方式：</strong>請以<strong>近 2 週～1 個月</strong>「多數日子」的狀態為準（偶爾例外沒關係）。<br>
-        <strong>💡計分：</strong>每勾選 1 項 +1 分，<strong>滿分 10 分</strong>。
+        <strong>💡計分：</strong>每勾選 1 項 +1 分，<strong>滿分 8 分</strong>。
         
       </div>
 
       <div class="quiz-list">
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🕰️ 規律作息：每天固定時間起床</span></label>
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>📱 數位斷食：睡前 1 小時不看手機</span></label>
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>☕ 避開刺激：下午 3 點後不攝取咖啡因</span></label>
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🧘 舒壓儀式：睡前看書、冥想或聽音樂</span></label>
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🕯️ 環境控制：臥室全暗且溫度舒適</span></label>
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🥃 酒精斷捨離：睡前不依賴酒精助眠</span></label>
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🍛 腸胃放鬆：睡前 3 小時不吃大餐或宵夜</span></label>
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🚀 秒睡體質：躺下後 20 分鐘內能入睡</span></label>
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>💤 睡眠深度：半夜不輕易醒來或能秒睡回去</span></label>
-        <label class="quiz-item"><input type="checkbox" class="q-check"><span>☀️ 晨間精神：醒來神清氣爽而非疲累</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🕰️ 規律作息：每天固定時間起床（±1小時內）</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>☕ 避開刺激：下午 3 點後避免咖啡因（咖啡、濃茶、能量飲）</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🍛 腸胃放鬆：睡前 2–3 小時不吃高油脂、高熱量或過飽</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>📱 數位斷食：睡前 30–60 分鐘不滑手機</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🕯️ 環境控制：臥室全暗、安靜且溫度舒適</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🚀 易睡體質：躺床後約 20–30 分鐘內入睡</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>💤 睡眠深度：半夜醒來不超過 1 次，或能迅速再入睡</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>☀️ 晨間精神：醒來神清氣爽，而不是感到疲累</span></label>
       </div>
 
       <button class="btn btn-main" id="btn-result" type="button">查看我的檢測結果 ✨</button>
@@ -293,7 +291,7 @@
 
       <div class="score-line">
         <div class="score-badge" id="score-label">—</div>
-        <div class="score-detail" id="score-detail">滿分 10 分</div>
+        <div class="score-detail" id="score-detail">滿分 8 分</div>
       </div>
 
       <div class="feedback-text" id="feedback-msg"></div>
@@ -321,7 +319,7 @@
     }
 
     function resultPack(score){
-      if (score >= 9) {
+      if (score >= 7) {
         return {
           banner: "🏆🌙✨",
           sub: "傳說級模範生：你是睡眠界資優生！",
@@ -329,7 +327,7 @@
           text: "恭喜你！你的作息與睡眠品質都很到位。規律睡眠會讓精神、代謝與情緒更穩，繼續保持這份幸福能量吧！✨"
         };
       }
-      if (score >= 6) {
+      if (score >= 5) {
         return {
           banner: "🌿😴👍",
           sub: "穩定優等生：大多數日子都睡得不錯",
@@ -360,8 +358,8 @@
 const bannerEl = document.getElementById('emoji-banner');
 bannerEl.classList.remove('banner--legend','banner--good','banner--warn','banner--danger');
 
-if (score >= 9) bannerEl.classList.add('banner--legend');
-else if (score >= 6) bannerEl.classList.add('banner--good');
+if (score >= 7) bannerEl.classList.add('banner--legend');
+else if (score >= 5) bannerEl.classList.add('banner--good');
 else if (score >= 3) bannerEl.classList.add('banner--warn');
 else bannerEl.classList.add('banner--danger');
       
@@ -370,7 +368,7 @@ else bannerEl.classList.add('banner--danger');
       scoreLabel.textContent = pack.label;
 
       meterBar.style.width = `${Math.round((score / 10) * 100)}%`;
-      document.getElementById('score-detail').textContent = `你的分數：${score} 分（滿分 10 分）`;
+      document.getElementById('score-detail').textContent = `你的分數：${score} 分（滿分 8 分）`;
 
       feedbackMsg.innerHTML = pack.text;
 
