@@ -1,473 +1,884 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌙睡眠模範生檢測｜德泰法蘭西床</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌙睡眠模範生檢測｜德泰法蘭西床</title>
+  <style>
+    :root{
+      --bg:#f4f1ea;
+      --card:#ffffff;
+      --text:#6f6256;
+      --pink:#bca88f;
+      --blue:#9c8f7d;
+      --border:#f0ede5;
+      --shadow:0 10px 40px rgba(163,177,198,.15);
+      --soft:#fdfcf9;
+      --soft2:#f9f9f9;
 
-<style>
+      /* share card base */
+      --cardBg:#f6f2ea;
+      --cardText:#6f6256;
+      --cardSub:#7f6e5c;
 
-:root{
---bg:#f4f1ea;
---card:#ffffff;
---text:#6f6256;
---pink:#bca88f;
---blue:#9c8f7d;
---border:#f0ede5;
---shadow:0 10px 40px rgba(163,177,198,.15);
---soft:#fdfcf9;
---soft2:#f9f9f9;
+      /* level blocks */
+      --lvl-legend:#efe3c7;
+      --lvl-good:#dbe7df;
+      --lvl-warn:#f0dfcf;
+      --lvl-danger:#e7c6c7;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      padding:20px;
+      background:var(--bg);
+      color:var(--text);
+      font-family:'PingFang TC','Microsoft JhengHei',sans-serif;
+      line-height:1.6;
+    }
+    .container{
+      max-width:clamp(480px, 90%, 560px);
+      margin:0 auto;
+      background:var(--card);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:30px 22px;
+    }
+    h1{
+      margin:0 0 10px 0;
+      color:var(--pink);
+      font-size:1.45rem;
+      line-height:1.35;
+      font-weight:800;
+      text-align:center;
+    }
+    .subtitle{
+      margin:0 0 14px 0;
+      color:var(--blue);
+      font-size:.95rem;
+      font-weight:650;
+      text-align:center;
+    }
+    .note{
+      margin:0 0 20px 0;
+      background:var(--soft2);
+      border-radius:16px;
+      padding:12px 14px;
+      font-size:.9rem;
+      line-height:1.7;
+    }
+    .note strong{ color:var(--text); }
 
---cardBg:#f6f2ea;
---cardText:#6f6256;
+    .note-list{
+      margin:0;
+      padding-left:18px;
+      line-height:1.75;
+    }
+    .note-list li{ margin:6px 0; }
+    .note strong{ font-weight:800; }
 
---lvl-legend:#efe3c7;
---lvl-good:#dbe7df;
---lvl-warn:#f0dfcf;
---lvl-danger:#e7c6c7;
+    .quiz-list{ margin:0 0 18px 0; padding:0; }
+    .quiz-item{
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      background:var(--soft);
+      border:1px solid var(--border);
+      padding:14px 16px;
+      margin:0 0 12px 0;
+      border-radius:16px;
+      cursor:pointer;
+      transition:transform .15s ease, border-color .15s ease, background-color .15s ease;
+      user-select:none;
+    }
+    .quiz-item:hover{
+      background:#fff;
+      border-color:var(--pink);
+      transform:translateY(-1px);
+    }
+    .quiz-item span{
+      display:block;
+      font-size:.98rem;
+      line-height:1.45;
+    }
+    input[type="checkbox"]{
+      margin-top:2px;
+      transform:scale(1.15);
+      accent-color:var(--pink);
+      cursor:pointer;
+      flex:0 0 auto;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:999px;
+      padding:15px 16px;
+      font-size:1.05rem;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .15s ease, filter .15s ease;
+    }
+    .btn-main{
+      background:var(--pink);
+      color:#fff;
+      box-shadow:0 4px 12px rgba(224,175,180,.28);
+    }
+    .btn-main:hover{ transform:scale(1.01); filter:brightness(.98); }
+
+    .btn-reset{
+      margin-top:14px;
+      background:var(--blue);
+      color:#fff;
+    }
+    .btn-reset:hover{ transform:scale(1.01); filter:brightness(.97); }
+
+    #result-box{ display:none; }
+    .fade-in{ animation:fadeIn .45s ease; }
+    @keyframes fadeIn{
+      from{ opacity:0; transform:translateY(10px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+
+    .banner{
+      border-radius:18px;
+      padding:14px 16px;
+      margin:0 0 14px 0;
+      text-align:center;
+      font-weight:900;
+      letter-spacing:.3px;
+      background:linear-gradient(180deg, rgba(224,175,180,.22), rgba(163,177,198,.16));
+    }
+    .banner--legend{
+      background: linear-gradient(135deg, rgba(235, 211, 156, 0.55), rgba(204, 173, 104, 0.35));
+    }
+    .banner--good{
+      background: linear-gradient(135deg, rgba(176, 205, 186, 0.55), rgba(129, 168, 148, 0.35));
+    }
+    .banner--warn{
+      background: linear-gradient(135deg, rgba(241, 186, 140, 0.55), rgba(215, 143, 95, 0.35));
+    }
+    .banner--danger{
+      background: linear-gradient(135deg, rgba(224, 175, 180, 0.65), rgba(193, 135, 143, 0.4));
+    }
+
+    .banner .big{
+      font-size:1.2rem;
+      margin-bottom:4px;
+    }
+    .banner .small{
+      font-size:1.05rem;
+      font-weight:800;
+    }
+
+    .score-title{
+      text-align:center;
+      font-size:1.02rem;
+      font-weight:800;
+      color:var(--blue);
+      margin:8px 0 8px 0;
+    }
+
+    .meter{
+      background:#efece4;
+      border-radius:999px;
+      height:14px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      margin:0 0 10px 0;
+    }
+    .meter > div{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, #8c755f 0%, #a98f72 60%, #bda385 100%);
+      transition:width .4s ease;
+    }
+
+    .score-line{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      margin:0 0 10px 0;
+      font-weight:800;
+      flex-wrap:wrap; /* ✅ 修正 */
+    }
+    .score-badge{
+      padding:6px 12px;
+      border-radius:999px;
+      background:#efe7dd;
+      border:1px solid #d8c8b6;
+      color:#7f6e5c;
+      font-size:.92rem;
+      white-space:normal;
+      line-height:1.4;
+    }
+    .score-detail{
+      font-size:.92rem;
+      opacity:.9;
+      white-space:normal;
+      overflow-wrap:anywhere;
+      text-align:right;
+    }
+
+    .feedback-text{
+      background:var(--soft2);
+      padding:18px 18px;
+      border-radius:18px;
+      font-size:1rem;
+      line-height:1.85;
+      margin:0 0 12px 0;
+    }
+
+    .result-actions{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+    .btn-secondary{
+      width:100%;
+      border:none;
+      border-radius:999px;
+      padding:14px 16px;
+      font-size:1rem;
+      font-weight:800;
+      cursor:pointer;
+      background:#e9e2d7;
+      color:#6f6256;
+      border:1px solid #d8c8b6;
+      transition:transform .15s ease, filter .15s ease;
+    }
+    .btn-secondary:hover{ transform:scale(1.01); filter:brightness(.99); }
+
+    @media (min-width:520px){
+      .result-actions .btn-secondary{ width:calc(50% - 5px); }
+    }
+
+    @media (max-width:420px){
+      body{ padding:14px; }
+      .container{ padding:24px 16px; border-radius:22px; }
+      h1{ font-size:1.28rem; }
+      .subtitle{ font-size:.9rem; }
+      .quiz-item{ padding:12px 14px; }
+
+      .score-line{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+      }
+      .score-detail{
+        text-align:left;
+        white-space:normal;
+        overflow-wrap:anywhere;
+      }
+      .score-badge{ white-space:normal; }
+    }
+
+    .brand-footer{
+      text-align:center;
+      margin-top:12px;
+      opacity:.6;
+    }
+    .brand-footer img{
+      max-width:110px;
+      height:auto;
+      display:inline-block;
+    }
+
+    /* ===== 分享圖卡 Modal（✅ 不滾動、不裁切） ===== */
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+    .modal.open{ display:flex; }
+
+    .modal-panel{
+      width:min(860px, 96vw);
+      max-height:92vh;                 /* ✅ 限制高度，避免整個畫面被撐爆 */
+      background:#fff;
+      border-radius:18px;
+      box-shadow:0 18px 60px rgba(0,0,0,.25);
+      padding:14px;
+      display:flex;                    /* ✅ 讓 preview-wrap 能拿到固定高度 */
+      flex-direction:column;
+      gap:10px;
+    }
+    .modal-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .modal-top .hint{
+      font-weight:800;
+      color:#6f6256;
+      font-size:.95rem;
+    }
+    .icon-btn{
+      border:none;
+      background:#f2eee7;
+      border:1px solid #e5dccf;
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-weight:900;
+      color:#6f6256;
+      flex:0 0 auto;
+    }
+
+    .preview-wrap{
+      flex:1 1 auto;                   /* ✅ 占滿剩餘可用高度 */
+      min-height:220px;
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;              /* ✅ 垂直置中 */
+      overflow:hidden;                 /* ✅ 不滾動 */
+      background:#f7f4ef;
+      border:1px solid #efe6d9;
+      border-radius:14px;
+      padding:12px;
+      position:relative;
+    }
+
+    /* 固定 1080x1920 原尺寸（輸出用） */
+    #shareCard{
+        width:1080px;
+  height:1920px;
+  background:var(--cardBg);
+  border-radius:44px;
+
+  /* （ QR+logo 安全區） */
+  padding:230px 90px 260px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  box-sizing:border-box;
+  color:var(--cardText);
+  position:relative;
+
+  /* 防止 iOS/Android 自動放大字導致跑版 */
+  -webkit-text-size-adjust:none;
+  text-size-adjust:none;
 }
+#shareCard *{
+  -webkit-text-size-adjust:none;
+  text-size-adjust:none;
+    }
 
-*{box-sizing:border-box;}
-
-body{
-margin:0;
-padding:20px;
-background:var(--bg);
-color:var(--text);
-font-family:'PingFang TC','Microsoft JhengHei',sans-serif;
-line-height:1.6;
-}
-
-.container{
-max-width:560px;
-margin:auto;
-background:#fff;
-border-radius:28px;
-box-shadow:var(--shadow);
-padding:30px 22px;
-}
-
-h1{
-margin:0 0 10px 0;
-color:var(--pink);
-font-size:1.45rem;
-font-weight:800;
-text-align:center;
-}
-
-.subtitle{
-margin:0 0 14px 0;
-color:var(--blue);
-font-size:.95rem;
-font-weight:650;
-text-align:center;
-}
-
-.note{
-margin:0 0 20px 0;
-background:var(--soft2);
-border-radius:16px;
-padding:12px 14px;
-font-size:.9rem;
-}
-
-.quiz-item{
-display:flex;
-gap:14px;
-background:var(--soft);
-border:1px solid var(--border);
-padding:14px 16px;
-margin-bottom:12px;
-border-radius:16px;
-cursor:pointer;
-}
-
-input[type="checkbox"]{
-transform:scale(1.15);
-accent-color:var(--pink);
-}
-
-.btn{
-width:100%;
-border:none;
-border-radius:999px;
-padding:15px;
-font-size:1.05rem;
-font-weight:800;
-cursor:pointer;
-}
-
-.btn-main{
-background:var(--pink);
-color:#fff;
-}
-
-.btn-reset{
-margin-top:14px;
-background:var(--blue);
-color:#fff;
-}
-
-#result-box{display:none;}
-
-.banner{
-border-radius:18px;
-padding:14px;
-margin-bottom:14px;
-text-align:center;
-font-weight:900;
-}
-
-.score-title{
-text-align:center;
-font-weight:800;
-margin:10px 0;
-}
-
-.meter{
-background:#efece4;
-border-radius:999px;
-height:14px;
-overflow:hidden;
-margin-bottom:10px;
-}
-
-.meter div{
-height:100%;
-width:0%;
-background:#a98f72;
-}
-
-.feedback-text{
-background:var(--soft2);
-padding:18px;
-border-radius:18px;
-}
-
-.result-actions{
-margin-top:12px;
-}
-
-.btn-secondary{
-width:100%;
-border:none;
-border-radius:999px;
-padding:14px;
-font-weight:800;
-background:#e9e2d7;
-cursor:pointer;
-}
-
-.brand-footer{
-text-align:center;
-margin-top:12px;
-opacity:.6;
-}
-
-.brand-footer img{
-max-width:110px;
-}
-
-/* modal */
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.45);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:9999;
-}
-
-.modal.open{display:flex;}
-
-.modal-panel{
-width:min(820px,96vw);
-background:#fff;
-border-radius:18px;
-padding:14px;
-}
-
-.preview-wrap{
-display:flex;
-justify-content:center;
-align-items:center;
-overflow:hidden;
-background:#f7f4ef;
-border-radius:14px;
-padding:14px;
-height:70vh;
-}
-
-/* share card */
-
-#shareCard{
-width:1080px;
-height:1920px;
-background:var(--cardBg);
-border-radius:44px;
-padding:220px 90px 260px;
-display:flex;
-flex-direction:column;
-align-items:center;
-text-align:center;
-color:var(--cardText);
-}
-
-.sc-title{
-font-size:52px;
-font-weight:900;
-margin-bottom:40px;
-}
-
+    .sc-title{
+      font-size:52px;
+      font-weight:900;
+      text-align:center;
+      line-height:1.25;
+      margin:0 0 50px 0;
+      color:#6f6256;
+    }
 .sc-emoji{
-font-size:120px;
-margin-bottom:20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:28px;
+  font-size:120px;
+  line-height:1;
+  margin:10px 0 34px 0;
+  white-space:nowrap;
 }
-
-.sc-h2{
-font-size:70px;
-margin-bottom:20px;
-}
-
+    .sc-h2{
+      font-size:72px;
+      font-weight:900;
+      margin:0 0 26px 0;
+      letter-spacing:.5px;
+    }
 .sc-score{
-font-size:160px;
-font-weight:900;
+  font-size:160px;
+  font-weight:900;
+  margin:0 0 24px 0;
+  white-space:nowrap;
+  font-variant-numeric: tabular-nums;
 }
+    .sc-label{
+      font-size:70px;
+      font-weight:900;
+      margin:0 0 44px 0;
+    }
 
-.sc-label{
-font-size:64px;
-margin-bottom:30px;
-}
+    .sc-im{
+      font-size:74px;
+      font-weight:900;
+      margin:0 0 12px 0;
+    }
 
-.sc-block{
-width:100%;
-padding:40px;
-border-radius:20px;
-margin-bottom:40px;
-}
+    .sc-block{
+      width:100%;
+      border-radius:22px;
+      padding:44px 40px;
+      text-align:center;
+      margin:24px 0 48px 0;
+    }
+    .sc-block .b1{
+      font-size:66px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+    .sc-block .b2{
+      font-size:56px;
+      font-weight:800;
+      opacity:.95;
+    }
 
-.sc-block .b1{
-font-size:66px;
-font-weight:900;
-}
+    .sc-cta{
+      font-size:44px;
+      font-weight:800;
+      margin:12px 0 26px 0;
+      text-align:center;
+      color:#7f6e5c;
+    }
 
-.sc-block .b2{
-font-size:54px;
-}
+    .sc-qr{
+      width:320px;
+      height:320px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid #e6dccf;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:10px 0 34px 0;
+      overflow:hidden;
+    }
+    .sc-qr svg{ width:260px; height:260px; display:block; }
 
-.sc-cta{
-font-size:42px;
-margin-bottom:24px;
-}
+    .sc-logo{
+      position:absolute;
+      bottom:70px;
+      left:0;
+      right:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      pointer-events:none;
+    }
+    .sc-logo img{
+      width:220px;
+      height:auto;
+      display:block;
+      opacity:.95;
+    }
 
-.sc-qr{
-width:300px;
-height:300px;
-border-radius:12px;
-background:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-}
+    /* 四等級：色塊底色 */
+    #shareCard.level-legend .sc-block{ background:var(--lvl-legend); }
+    #shareCard.level-good   .sc-block{ background:var(--lvl-good); }
+    #shareCard.level-warn   .sc-block{ background:var(--lvl-warn); }
+    #shareCard.level-danger .sc-block{ background:var(--lvl-danger); }
 
-.sc-logo{
-position:absolute;
-bottom:80px;
-}
-
-</style>
+    .modal-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .modal-actions button{
+      flex:1 1 200px;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="container">
+    <div id="quiz-ui">
+      <h1>🌙 你是「睡眠模範生」還是「夜貓進修生」？🎓</h1>
+      <p class="subtitle">✨ 3/13 世界睡眠日 ✨<br>做個簡單的小測驗，檢視一下日常的睡眠狀況吧！</p>
 
-<div class="container">
+      <div class="note">
+        <ul class="note-list">
+          <li><strong>作答方式：</strong>請依<strong>最近 2 週～1 個月</strong>的睡眠狀況勾選。</li>
+          <li>本測驗為日常睡眠習慣自我檢視，非醫療評估用途。</li>
+        </ul>
+      </div>
 
-<div id="quiz-ui">
+      <div class="quiz-list">
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🕰️ 規律作息：每天固定時間起床（±1小時內）</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>☕ 避開刺激：下午 3 點後避免咖啡因（咖啡、濃茶、能量飲）</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🍛 腸胃放鬆：睡前 2–3 小時不吃高油脂、高熱量或過飽</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>📱 數位斷食：睡前 30–60 分鐘不滑手機</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🕯️ 環境控制：臥室全暗、安靜且溫度舒適</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>🚀 易睡體質：躺床後約 20–30 分鐘內入睡</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>💤 睡眠深度：半夜醒來不超過 1 次，或能迅速再入睡</span></label>
+        <label class="quiz-item"><input type="checkbox" class="q-check"><span>☀️ 晨間精神：醒來神清氣爽，而不是感到疲累</span></label>
+      </div>
 
-<h1>🌙 你是「睡眠模範生」還是「夜貓進修生」？🎓</h1>
+      <button class="btn btn-main" id="btn-result" type="button">查看我的檢測結果</button>
+    </div>
 
-<p class="subtitle">✨ 3/13 世界睡眠日 ✨<br>做個簡單的小測驗</p>
+    <div id="result-box">
+      <div class="banner" id="emoji-banner">
+        <div class="big" id="banner-title">🌙</div>
+        <div class="small" id="banner-sub">你的結果出爐啦</div>
+      </div>
 
-<div class="quiz-list">
+      <div class="score-title">📈 我的好眠指數</div>
 
-<label class="quiz-item"><input type="checkbox" class="q-check">規律作息</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">避免咖啡因</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">睡前不吃重食</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">睡前不滑手機</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">臥室環境舒適</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">20分鐘內入睡</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">半夜不醒</label>
-<label class="quiz-item"><input type="checkbox" class="q-check">起床精神好</label>
+      <div class="meter" aria-label="sleep score meter">
+        <div id="meter-bar"></div>
+      </div>
 
-</div>
+      <div class="score-line">
+        <div class="score-badge" id="score-label">—</div>
+        <div class="score-detail" id="score-detail">滿分 8 分</div>
+      </div>
 
-<button class="btn btn-main" id="btn-result">查看結果</button>
-
-</div>
-
-<div id="result-box">
-
-<div class="banner">
-<div id="banner-title">🌙</div>
-<div id="banner-sub">結果</div>
-</div>
-
-<div class="score-title">我的好眠指數</div>
-
-<div class="meter"><div id="meter-bar"></div></div>
-
-<div id="score-label"></div>
-
-<div class="feedback-text" id="feedback-msg"></div>
+      <div class="feedback-text" id="feedback-msg"></div>
 
 <div class="result-actions">
-<button class="btn-secondary" id="btn-share">📣 分享結果</button>
+  <button class="btn-secondary" id="btn-share" type="button">📣 分享結果</button>
 </div>
 
-<button class="btn btn-reset" id="btn-reset">重新測試</button>
+      <button class="btn btn-reset" id="btn-reset" type="button">🔄 重新測試</button>
+    </div>
+  </div>
 
-</div>
+  <div class="brand-footer">
+    <a href="https://www.tehtai.com.tw/locations/" target="_blank" rel="noopener">
+      <img src="../tehtailogo.png" alt="德泰法蘭西床">
+    </a>
+  </div>
 
-</div>
+  <div class="modal" id="cardModal" aria-hidden="true">
+    <div class="modal-panel">
+      <div class="modal-top">
+        <div class="hint">我的好眠指數</div>
+        <button class="icon-btn" id="btnCloseModal" type="button">✕</button>
+      </div>
 
-<div class="brand-footer">
-<img src="../tehtailogo.png">
-</div>
+      <div class="preview-wrap" id="previewWrap">
+        <div id="shareCard">
+          <div class="sc-title" id="scTitle">🌙 你是「睡眠模範生」還是「夜貓進修生」？🎓</div>
+          <div class="sc-emoji" id="scEmoji">🌙</div>
 
-<div class="modal" id="cardModal">
+          <div class="sc-h2">我的好眠指數</div>
+          <div class="sc-score" id="scScore">0 / 8</div>
+          <div class="sc-label" id="scLabel">好眠指數：偏低</div>
 
-<div class="modal-panel">
+          <div class="sc-im">我是：</div>
 
-<div class="preview-wrap">
+          <div class="sc-block" id="scBlock">
+            <div class="b1" id="scType">睡眠警示戶</div>
+            <div class="b2" id="scSub">身體需要更多修復時間</div>
+          </div>
 
-<div id="shareCard">
+          <div class="sc-cta">你也來測看看自己有沒有睡好呢？</div>
 
-<div class="sc-title">🌙 睡眠檢測</div>
+          <div class="sc-qr" id="scQr"></div>
 
-<div class="sc-emoji" id="scEmoji">🌙</div>
+          <div class="sc-logo">
+            <img src="../tehtailogo.png" alt="德泰法蘭西床">
+          </div>
+        </div>
+      </div>
 
-<div class="sc-h2">我的好眠指數</div>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="btnDownloadCard" type="button">⬇️ 下載結果圖片</button>
+        <button class="btn-secondary" id="btnSystemShare" type="button">📤 分享到社群</button>
+      </div>
+    </div>
+  </div>
 
-<div class="sc-score" id="scScore">0 / 8</div>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
-<div class="sc-label" id="scLabel">好眠指數</div>
+  <script>
+    const quizUI = document.getElementById('quiz-ui');
+    const resultBox = document.getElementById('result-box');
+    const feedbackMsg = document.getElementById('feedback-msg');
+    const btnResult = document.getElementById('btn-result');
+    const btnReset = document.getElementById('btn-reset');
 
-<div class="sc-block">
-<div class="b1" id="scType"></div>
-<div class="b2" id="scSub"></div>
-</div>
+    const bannerTitle = document.getElementById('banner-title');
+    const bannerSub = document.getElementById('banner-sub');
+    const scoreLabel = document.getElementById('score-label');
+    const meterBar = document.getElementById('meter-bar');
 
-<div class="sc-cta">你也來測看看</div>
+    const cardModal = document.getElementById('cardModal');
+    const btnCard = document.getElementById('btn-card');
+    const btnShare = document.getElementById('btn-share');
+    const btnCloseModal = document.getElementById('btnCloseModal');
+    const btnDownloadCard = document.getElementById('btnDownloadCard');
+    const btnSystemShare = document.getElementById('btnSystemShare');
 
-<div class="sc-qr" id="scQr"></div>
+    const previewWrap = document.getElementById('previewWrap');
 
-</div>
+    const shareCard = document.getElementById('shareCard');
+    const scEmoji = document.getElementById('scEmoji');
+    const scScore = document.getElementById('scScore');
+    const scLabel = document.getElementById('scLabel');
+    const scType = document.getElementById('scType');
+    const scSub = document.getElementById('scSub');
+    const scQr = document.getElementById('scQr');
 
-</div>
+    let latestScore = 0;
+    let latestPack = null;
 
-<button id="btnDownloadCard">下載結果圖片</button>
-<button id="btnSystemShare">分享到社群</button>
+    function getScore(){
+      return document.querySelectorAll('.q-check:checked').length;
+    }
 
-</div>
+    function resultPack(score){
+      if (score >= 7) {
+        return {
+          banner: "🏆🌙✨",
+          sub: "傳說級模範生：你是睡眠界資優生！",
+          type: "傳說級模範生",
+          sub2: "你是睡眠界資優生！",
+          label: "好眠指數：優秀",
+          text: "恭喜你！你的作息與睡眠品質都很到位。規律睡眠會讓精神、代謝與情緒更穩，繼續保持這份幸福能量吧！✨"
+        };
+      }
+      if (score >= 5) {
+        return {
+          banner: "🌿😴👍",
+          sub: "穩定優等生：大多數日子都睡得不錯",
+          type: "穩定優等生",
+          sub2: "大多數日子都睡得不錯",
+          label: "好眠指數：良好",
+          text: "很棒！你的睡眠基礎很穩。只要再挑 1～2 項最容易做到的習慣加強（例如減少睡前的光線刺激），就很有機會往上加分！💪"
+        };
+      }
+      if (score >= 3) {
+        return {
+          banner: "⚠️🕯️🥱",
+          sub: "夜貓進修生：疲勞訊號出現了",
+          type: "夜貓進修生",
+          sub2: "疲勞訊號出現了",
+          label: "好眠指數：需加強",
+          text: "警報響起！短期撐得住，但長期身體會抗議。今晚先從「提早 30 分鐘休息」或「固定起床時間」選一個開始改善，最有效。"
+        };
+      }
+      return {
+        banner: "😱🛌🌀",
+        sub: "睡眠警示戶：身體需要更多修復時間",
+        type: "睡眠警示戶",
+        sub2: "身體需要更多修復時間",
+        label: "好眠指數：偏低",
+        text: "目前的睡眠狀態可能影響身體的修復與精神。除了建立固定起床時間與減少睡前光線刺激，也可檢視整體睡眠時數是否足夠（多數成人約需 7–9 小時）。若持續 2–4 週仍無改善，建議尋求專業醫師協助評估。"
+      };
+    }
 
-</div>
+    function setBannerClass(score){
+      const bannerEl = document.getElementById('emoji-banner');
+      bannerEl.classList.remove('banner--legend','banner--good','banner--warn','banner--danger');
+      if (score >= 7) bannerEl.classList.add('banner--legend');
+      else if (score >= 5) bannerEl.classList.add('banner--good');
+      else if (score >= 3) bannerEl.classList.add('banner--warn');
+      else bannerEl.classList.add('banner--danger');
+    }
 
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    function setShareCardLevel(score){
+      shareCard.classList.remove('level-legend','level-good','level-warn','level-danger');
+      if (score >= 7) shareCard.classList.add('level-legend');
+      else if (score >= 5) shareCard.classList.add('level-good');
+      else if (score >= 3) shareCard.classList.add('level-warn');
+      else shareCard.classList.add('level-danger');
+    }
 
-<script>
+    function fitShareCardPreview(){
+      if(!previewWrap) return;
 
-const btnResult=document.getElementById("btn-result")
-const btnShare=document.getElementById("btn-share")
-const cardModal=document.getElementById("cardModal")
-const scQr=document.getElementById("scQr")
+      const padding = 24; // preview-wrap 內部留白（避免貼邊）
+      const availW = previewWrap.clientWidth - padding;
+      const availH = previewWrap.clientHeight - padding;
 
-function getScore(){
-return document.querySelectorAll(".q-check:checked").length
+      const baseW = 1080;
+      const baseH = 1920;
+
+      const scale = Math.min(availW / baseW, availH / baseH);
+
+      // 安全值：避免某些極端尺寸算出 0
+      const safeScale = Math.max(0.05, Math.min(scale, 1));
+
+      shareCard.style.transform = `scale(${safeScale})`;
+    }
+
+    function openModal(){
+      cardModal.classList.add('open');
+      cardModal.setAttribute('aria-hidden','false');
+
+      // 等畫面真的 render 完再算
+      requestAnimationFrame(() => {
+        fitShareCardPreview();
+      });
+    }
+
+    function closeModal(){
+      cardModal.classList.remove('open');
+      cardModal.setAttribute('aria-hidden','true');
+    }
+
+    function generateQrSvg(text, size=260){
+      const url = "https://api.qrserver.com/v1/create-qr-code/?format=svg&size="+size+"x"+size+"&data=" + encodeURIComponent(text);
+      return fetch(url).then(r=>r.text());
+    }
+
+    async function buildShareCard(){
+      if(!latestPack) return;
+
+      const score = latestScore;
+      const pack = latestPack;
+
+      scEmoji.textContent = pack.banner; // ✅ 只顯示一次
+scScore.textContent = `${score}\u00A0/\u00A08`;
+      scLabel.textContent = pack.label;
+      scType.textContent = pack.type;
+      scSub.textContent = pack.sub2;
+
+      setShareCardLevel(score);
+
+const quizUrl = "https://tehtai.github.io/sleep-quiz/v2/";
+      scQr.innerHTML = "";
+      try{
+        const svg = await generateQrSvg(quizUrl, 260);
+        scQr.innerHTML = svg;
+      }catch(e){
+        scQr.textContent = "QR 產生失敗";
+      }
+
+      // 更新完內容後再 fit 一次（避免文字高度變動造成縮放不準）
+      requestAnimationFrame(() => {
+        fitShareCardPreview();
+      });
+    }
+
+async function exportCardBlob(){
+
+  const clone = shareCard.cloneNode(true);
+
+  clone.id = "shareCardExport";
+  clone.style.transform = "none";
+  clone.style.position = "fixed";
+  clone.style.left = "-99999px";
+  clone.style.top = "0";
+  clone.style.zIndex = "999999";
+  clone.style.display = "flex";
+
+  document.body.appendChild(clone);
+
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+  const canvas = await html2canvas(clone,{
+    scale:2,
+    useCORS:true,
+    backgroundColor:null
+  });
+
+  clone.remove();
+
+  return new Promise(resolve => canvas.toBlob(resolve,"image/png",1));
 }
 
-function showResults(){
+    async function downloadCard(){
+      const blob = await exportCardBlob();
+      if(!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "sleep-result.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
 
-const score=getScore()
+    async function systemShare(){
+      const blob = await exportCardBlob();
+      if(!blob) return;
 
-document.getElementById("meter-bar").style.width=(score/8*100)+"%"
+      const file = new File([blob], "sleep-result.png", { type:"image/png" });
 
-document.getElementById("score-label").textContent="分數："+score
+      if(navigator.share && navigator.canShare && navigator.canShare({ files:[file] })){
+        await navigator.share({
+          title: "我的好眠指數",
+          text: "我做了睡眠小測驗，你也來測看看！",
+          files: [file]
+        });
+      }else{
+        alert("此瀏覽器不支援下載/分享圖片，建議使用Chrome瀏覽器開啟。");
+        await downloadCard();
+      }
+    }
 
-document.getElementById("feedback-msg").textContent="你的睡眠習慣評估完成"
+    function showResults(){
+      const score = getScore();
+      const pack = resultPack(score);
 
-document.getElementById("quiz-ui").style.display="none"
-document.getElementById("result-box").style.display="block"
+      latestScore = score;
+      latestPack = pack;
 
-}
+      setBannerClass(score);
 
-btnResult.onclick=showResults
+      bannerTitle.textContent = pack.banner;
+      bannerSub.textContent = pack.sub;
+      scoreLabel.textContent = pack.label;
 
-btnShare.onclick=async()=>{
+      meterBar.style.width = `${Math.round((score / 8) * 100)}%`;
+      document.getElementById('score-detail').textContent = `你的分數：${score} 分（滿分 8 分）`;
 
-cardModal.classList.add("open")
+      feedbackMsg.innerHTML = pack.text;
 
-const url="https://tehtai.github.io/sleep-quiz/v2/"
+      quizUI.style.display = 'none';
+      resultBox.style.display = 'block';
+      resultBox.classList.remove('fade-in');
+      void resultBox.offsetWidth;
+      resultBox.classList.add('fade-in');
 
-const qr=`https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(url)}`
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-scQr.innerHTML=`<img src="${qr}">`
+    function resetGame(){
+      document.querySelectorAll('.q-check').forEach(cb => cb.checked = false);
+      resultBox.style.display = 'none';
+      quizUI.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-}
+    btnResult.addEventListener('click', showResults);
+    btnReset.addEventListener('click', resetGame);
 
-async function exportCard(){
+    /*btnCard.addEventListener('click', async ()=>{
+      if(!latestPack){
+        alert("請先點「查看我的檢測結果」產生結果後，再產生圖卡喔！");
+        return;
+      }
+      await buildShareCard();
+      openModal();
+    }); */
 
-const clone=document.getElementById("shareCard").cloneNode(true)
+    btnShare.addEventListener('click', async ()=>{
+      if(!latestPack){
+        alert("請先點「查看我的檢測結果」產生結果後，再分享喔！");
+        return;
+      }
+      await buildShareCard();
+      openModal();
+    });
 
-clone.style.position="fixed"
-clone.style.left="-9999px"
-clone.style.transform="none"
+    btnCloseModal.addEventListener('click', closeModal);
+    cardModal.addEventListener('click', (e)=>{
+      if(e.target === cardModal) closeModal();
+    });
 
-document.body.appendChild(clone)
+    btnDownloadCard.addEventListener('click', downloadCard);
+    btnSystemShare.addEventListener('click', systemShare);
 
-const canvas=await html2canvas(clone,{scale:2})
-
-clone.remove()
-
-return new Promise(r=>canvas.toBlob(r,"image/png"))
-
-}
-
-document.getElementById("btnDownloadCard").onclick=async()=>{
-
-const blob=await exportCard()
-
-const url=URL.createObjectURL(blob)
-
-const a=document.createElement("a")
-
-a.href=url
-a.download="sleep-result.png"
-
-a.click()
-
-}
-
-document.getElementById("btnSystemShare").onclick=async()=>{
-
-const blob=await exportCard()
-
-const file=new File([blob],"sleep-result.png",{type:"image/png"})
-
-if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-
-navigator.share({files:[file]})
-
-}else{
-
-alert("此瀏覽器不支援下載/分享圖片，建議使用Chrome瀏覽器開啟。")
-
-}
-
-}
-
-</script>
-
+    window.addEventListener('resize', ()=>{
+      if(cardModal.classList.contains('open')) fitShareCardPreview();
+    });
+  </script>
 </body>
 </html>
