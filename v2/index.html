@@ -197,10 +197,11 @@
     .score-line{
       display:flex;
       justify-content:space-between;
-      align-items:center;
+      align-items:flex-start;
       gap:10px;
       margin:0 0 10px 0;
       font-weight:800;
+      lex-wrap: wrap;  /* 左右可以掉行 */
     }
     .score-badge{
       padding:6px 12px;
@@ -209,12 +210,15 @@
       border:1px solid #d8c8b6;
       color:#7f6e5c;
       font-size:.92rem;
-      white-space:nowrap;
+      white-space:normal;
+      line-height: 1.4;
     }
     .score-detail{
       font-size:.92rem;
       opacity:.9;
-      white-space:nowrap;
+      white-space:normal;
+      overflow-wrap: anywhere;  
+      text-align: right;
     }
 
     .feedback-text{
@@ -258,6 +262,21 @@
       h1{ font-size:1.28rem; }
       .subtitle{ font-size:.9rem; }
       .quiz-item{ padding:12px 14px; }
+     
+      /*防止字體放大時爆版 */
+  .score-line{
+    flex-direction: column;
+    align-items: flex-start;
+    gap:6px;
+  }
+  .score-detail{
+    text-align:left;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  .score-badge{
+    white-space:normal;
+  }
     }
 
     /* LOGO footer */
