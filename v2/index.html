@@ -513,7 +513,7 @@
     }
 
     function fitCardPreview(){
-      // 依照可用空間縮放 1080x1920，避免裁切
+      
       const padding = 24;
       const availW = previewWrap.clientWidth - padding;
       const availH = previewWrap.clientHeight - padding;
@@ -535,7 +535,7 @@
     }
 
     async function fetchCardBlob(){
-      // 直接抓圖檔 blob（不用截圖，iPhone/Android都穩）
+      
       const src = resultCardImg.getAttribute("src");
       const res = await fetch(src, { cache: "no-store" });
       if(!res.ok) throw new Error("Fetch card failed");
@@ -554,7 +554,7 @@
         a.remove();
         URL.revokeObjectURL(url);
       }catch(e){
-        alert("此瀏覽器不支援下載/分享圖片，建議使用Chrome瀏覽器開啟。");
+        alert("此瀏覽器不支援下載/分享圖片，建議使用Chrome / Safari瀏覽器開啟。");
       }
     }
 
@@ -566,14 +566,14 @@
         if(navigator.share && navigator.canShare && navigator.canShare({ files:[file] })){
           await navigator.share({
             title: "我的好眠指數",
-            text: "我做了睡眠小測驗，你也來測看看！",
+            text: "我做了睡眠模範生檢測，你也來測看看！",
             files: [file]
           });
         }else{
-          alert("此瀏覽器不支援下載/分享圖片，建議使用Chrome瀏覽器開啟。");
+          alert("此瀏覽器不支援下載/分享圖片，建議使用Chrome / Safari瀏覽器開啟。");
         }
       }catch(e){
-        alert("此瀏覽器不支援下載/分享圖片，建議使用Chrome瀏覽器開啟。");
+        alert("此瀏覽器不支援下載/分享圖片，建議使用Chrome / Safari瀏覽器開啟。");
       }
     }
 
@@ -614,7 +614,7 @@
     btnResult.addEventListener('click', showResults);
     btnReset.addEventListener('click', resetGame);
 
-    // ✅ 按「分享結果」直接開圖卡（依四種結果切圖）
+    //  按「分享結果」直接開圖卡（依四種結果切圖）
     btnShare.addEventListener('click', async ()=>{
       if(!latestPack){
         alert("請先點「查看我的檢測結果」產生結果後，再分享喔！");
@@ -632,7 +632,7 @@
       // 設定預覽圖
       resultCardImg.src = imgSrc;
 
-      // 圖片載入完再開 modal（避免一片空白）
+      
       resultCardImg.onload = () => openModal();
       resultCardImg.onerror = () => alert("圖卡載入失敗，請確認檔案路徑是否正確。");
     });
